@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-gin
+spec:
+  selector:
+    matchLabels:
+      run: hello-gin
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: hello-gin
+    spec:
+      containers:
+        - name: hello-gin
+          image: hello-gin
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
