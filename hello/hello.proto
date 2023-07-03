@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package hello;
+
+option go_package = "awesomeProject1/hello";
+
+service Helloer{
+    
+    rpc SayHi(HiReq) returns(HiRsp) {}
+}
+
+message HiReq{
+    string note =1;
+}
+
+message HiRsp {
+    string note = 1;
+}
