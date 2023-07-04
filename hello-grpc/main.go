@@ -9,34 +9,35 @@ import (
 
 	"google.golang.org/grpc"
 
-	"awesomeProject1/hello"
+	"awesomeProject1/grpcCommon/helloPb"
 )
 
 type server struct {
-	hello.UnimplementedHelloerServer
+	helloPb.UnimplementedHelloerServer
 }
 
 var (
-	port = flag.Int("port", 8080, "The Server Port")
+	port = flag.Int("port", 8080, "The server port")
 )
 
-func (s *server) SayHi(ctx context.Context, req *hello.HiReq) (*hello.HiRsp, error) {
+func (s *server) SayHi(ctx context.Context, req *helloPb.HiReq) (*helloPb.HiRsp, error) {
 	rsp := req.Note + req.Note
 	log.Println(req)
-	return &hello.HiRsp{
+	return &helloPb.HiRsp{
 		Note: rsp,
 	}, nil
 }
 
 func main() {
-	lis, err := net.Listen("tcp", fmt.Sprintf("%d", *port))
+	flag.Parse()
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 
 	}
 
 	s := grpc.NewServer()
-	hello.RegisterHelloerServer(s, &server{})
+	helloPb.RegisterHelloerServer(s, &server{})
 
 	log.Printf("server listening at %v", lis.Addr())
 	if err = s.Serve(lis); err != nil {

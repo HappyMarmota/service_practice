@@ -20,6 +20,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: hello-gin
+                name: hello-client
                 port:
                   number: 80

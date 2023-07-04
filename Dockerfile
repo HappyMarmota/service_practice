@@ -6,13 +6,20 @@ RUN ln -snf /usr/share/zoneinfo/$TimeZone /etc/localtime && echo $TimeZone > /et
 
 COPY go.mod go.sum ./
 
-COPY hello_server ./
+
+WORKDIR /app/grpcCommon
+
+COPY grpcCommon ./
+
+WORKDIR /app
+
+COPY hello-grpc ./
 
 RUN go env -w GOSUMDB=off
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 
 
 RUN go mod tidy
-RUN CGO_ENABLED=0 GOOS=linux go build -o /hello_server
+RUN CGO_ENABLED=0 GOOS=linux go build -o /hello-grpc
 
-CMD ["/hello_server"]
+CMD ["/hello-grpc"]
