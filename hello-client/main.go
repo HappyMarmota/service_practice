@@ -12,10 +12,13 @@ import (
 
 func main() {
 	r := gin.Default()
-	rpcClient := initGrpc("hello-grpc.default.svc.cluster.local:8080")
+	// addr : <svc-name>.<namespace>.<cluster....
+	rpcClient := initGrpc("hello-grpc:80")
+
 	r.GET("/ping", func(c *gin.Context) {
 		var b dataStruct
-		rpcRsp, err := rpcClient.SayHi(nil, &helloPb.HiReq{Note: "hello"})
+
+		rpcRsp, err := rpcClient.SayHi(c, &helloPb.HiReq{Note: "hello"})
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}
@@ -39,7 +42,7 @@ func initGrpc(addr string) helloPb.HelloerClient {
 	if err != nil {
 		log.Fatalf("did not connect %v", err)
 	}
-	defer conn.Close()
+	// defer conn.Close() // 可以选择是长链接还是短连接
 	return helloPb.NewHelloerClient(conn) // need generic
 
 }

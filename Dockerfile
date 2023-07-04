@@ -13,13 +13,13 @@ COPY grpcCommon ./
 
 WORKDIR /app
 
-COPY hello-grpc ./
+COPY hello-client ./
 
 RUN go env -w GOSUMDB=off
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 
 
 RUN go mod tidy
-RUN CGO_ENABLED=0 GOOS=linux go build -o /hello-grpc
+RUN CGO_ENABLED=0 GOOS=linux go build -o /hello-client
 
-CMD ["/hello-grpc"]
+CMD ["/hello-client"]
